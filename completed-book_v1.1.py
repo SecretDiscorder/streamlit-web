@@ -1,22 +1,27 @@
-import os
 import subprocess
 import sys
 
 def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing package {package}: {e}")
 
-# List of required packages
-required_packages = [
-    'PyMuPDF',
-    'deep-translator',
-    'reportlab',
-    'Pillow',
-    'streamlit'
-]
+def main():
+    packages = [
+        "PyMuPDF",
+        "deep-translator",
+        "reportlab",
+        "Pillow",
+        "streamlit"
+    ]
 
-# Install each package
-for package in required_packages:
-    install(package)
+    for package in packages:
+        install(package)
+
+if __name__ == "__main__":
+    main()
+
     
 import io
 import tempfile
