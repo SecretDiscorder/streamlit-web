@@ -26,7 +26,7 @@ if __name__ == "__main__":
 import io
 import tempfile
 import os
-import fitz
+import PyMuPDF
 from deep_translator import GoogleTranslator
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
