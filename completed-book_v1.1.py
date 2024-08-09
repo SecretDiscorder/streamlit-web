@@ -7,6 +7,25 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import streamlit as st
 import concurrent.futures
+import os
+import subprocess
+import sys
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+# List of required packages
+required_packages = [
+    'PyMuPDF',
+    'deep-translator',
+    'reportlab',
+    'Pillow',
+    'streamlit'
+]
+
+# Install each package
+for package in required_packages:
+    install(package)
 
 def translate_text(text, target_language):
     translator = GoogleTranslator(source='auto', target=target_language)
