@@ -1,0 +1,5 @@
+PyMuPDF
+deep-translator
+reportlab
+Pillow
+streamlit
