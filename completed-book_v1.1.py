@@ -1,12 +1,3 @@
-import io
-import tempfile
-import os
-import fitz
-from deep_translator import GoogleTranslator
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-import streamlit as st
-import concurrent.futures
 import os
 import subprocess
 import sys
@@ -26,6 +17,17 @@ required_packages = [
 # Install each package
 for package in required_packages:
     install(package)
+    
+import io
+import tempfile
+import os
+import fitz
+from deep_translator import GoogleTranslator
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import streamlit as st
+import concurrent.futures
+
 
 def translate_text(text, target_language):
     translator = GoogleTranslator(source='auto', target=target_language)
