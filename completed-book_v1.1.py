@@ -3,7 +3,7 @@ import sys
 
 def install(package):
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", package])
     except subprocess.CalledProcessError as e:
         print(f"Error installing package {package}: {e}")
 
