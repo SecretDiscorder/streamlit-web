@@ -1,38 +1,12 @@
-import subprocess
-import sys
-
-def install(package):
-    try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", package])
-    except subprocess.CalledProcessError as e:
-        print(f"Error installing package {package}: {e}")
-
-def main():
-    packages = [
-        "PyMuPDF",
-        "deep-translator",
-        "reportlab",
-        "Pillow",
-        "streamlit"
-    ]
-
-    for package in packages:
-        install(package)
-
-if __name__ == "__main__":
-    main()
-
-    
 import io
 import tempfile
 import os
-import PyMuPDF
+import PyMuPDF  # Directly import PyMuPDF
 from deep_translator import GoogleTranslator
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import streamlit as st
 import concurrent.futures
-
 
 def translate_text(text, target_language):
     translator = GoogleTranslator(source='auto', target=target_language)
@@ -79,7 +53,7 @@ def translate_large_text(text, target_language, max_chunk_size=4000):
 def extract_text_and_images_from_pdf(pdf_file):
     text_blocks = []
     images = []
-    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
+    doc = PyMuPDF.open(stream=pdf_file.read(), filetype="pdf")  # Open the PDF file
 
     for page_num in range(len(doc)):
         page = doc.load_page(page_num)
@@ -116,6 +90,7 @@ def create_pdf_with_layout_and_translations(text_blocks, images, translated_text
         page_text_blocks[page].append(block)
 
     for img in images:
+        # Use the y-coordinate directly from the rectangle
         page = img['rect'][1] // height
         if page not in page_images:
             page_images[page] = []
@@ -133,12 +108,15 @@ def create_pdf_with_layout_and_translations(text_blocks, images, translated_text
                 img_path = tempfile.mktemp(suffix=".png")
                 with open(img_path, 'wb') as f:
                     f.write(img['image'].read())
-                c.drawImage(img_path, img['rect'][0], height - img['rect'][3], img['rect'][2] - img['rect'][0], img['rect'][3] - img['rect'][1])
+                # Correct handling of image position and size
+                c.drawImage(img_path, img['rect'][0], height - img['rect'][3], 
+                             img['rect'][2] - img['rect'][0], img['rect'][3] - img['rect'][1])
                 os.remove(img_path)
 
         if page_num in page_text_blocks:
             for block in page_text_blocks[page_num]:
                 c.setFont("Helvetica", 12)
+                # Correct handling of text position
                 c.drawString(block['rect'][0], height - block['rect'][1], block['text'])
 
         progress = (page_num + 1) / (num_pages + 1)
@@ -193,4 +171,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
